@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wanjiru's Boutique – Demo Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f5f0;--surface:#fff;--ink:#14213d;--muted:#5b6478;--line:#e2ded3;--primary:#0f766e;--primary-ink:#fff;--accent:#f59e0b;--mpesa:#43b02a;--danger:#b42318;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0e1626;--surface:#17233a;--ink:#f1f3f8;--muted:#a3adc2;--line:#2a3857;--primary:#2dd4bf;--primary-ink:#06201d;--danger:#ff8a80}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0e1626;--surface:#17233a;--ink:#f1f3f8;--muted:#a3adc2;--line:#2a3857;--primary:#2dd4bf;--primary-ink:#06201d;--danger:#ff8a80}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.demo-bar{background:var(--ink);color:var(--bg);font-size:.8rem;text-align:center;padding:.4rem 1rem}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.9rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.brand{font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
+.cartbtn{display:flex;align-items:center;gap:.5rem;background:var(--primary);color:var(--primary-ink);border:0;border-radius:999px;padding:.55rem 1.1rem;font-weight:600}
+.cartbtn span.n{background:var(--accent);color:#14213d;border-radius:999px;min-width:1.5rem;text-align:center;font-size:.85rem;padding:0 .35rem}
+.hero{padding:2.5rem 1.25rem 2rem;max-width:1100px;margin:0 auto;display:grid;gap:1.5rem;grid-template-columns:1.2fr 1fr;align-items:center}
+.hero h1{font-size:clamp(2rem,5.5vw,3.6rem);line-height:1.02;letter-spacing:-.035em;font-weight:800;margin:0 0 .8rem}
+.hero p{color:var(--muted);max-width:46ch;margin:0 0 1.2rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:.3rem .8rem;font-size:.85rem}
+.kitenge{aspect-ratio:1.3;border-radius:22px;background:
+ radial-gradient(circle at 50% 50%,var(--accent) 0 14%,transparent 15%),
+ radial-gradient(circle at 50% 50%,transparent 0 24%,#14213d 25% 31%,transparent 32%),
+ radial-gradient(circle at 50% 50%,#0f766e 0 46%,transparent 47%),
+ repeating-conic-gradient(from 0deg at 50% 50%,#d6336c 0 15deg,#f59e0b 15deg 30deg);
+ background-size:50% 77%,50% 77%,50% 77%,100% 100%;background-position:0 0,0 0,0 0,0 0;box-shadow:0 0 0 6px var(--surface),0 0 0 7px var(--line)}
+main{max-width:1100px;margin:0 auto;padding:0 1.25rem 4rem}
+h2{font-size:1.5rem;letter-spacing:-.02em;margin:1.5rem 0 1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.swatch{aspect-ratio:4/3;display:grid;place-items:center;font-size:2.6rem}
+.card .body{padding:.9rem 1rem 1rem;display:flex;flex-direction:column;gap:.35rem;flex:1}
+.card h3{margin:0;font-size:1.02rem}
+.card .price{font-weight:800}
+.card .desc{color:var(--muted);font-size:.85rem;flex:1}
+.btn{border:0;border-radius:10px;padding:.65rem 1rem;font-weight:600;background:var(--primary);color:var(--primary-ink)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.mpesa{background:var(--mpesa);color:#06210b}
+.btn.wa{background:#25d366;color:#06210b;text-decoration:none;display:inline-block;text-align:center}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+footer{border-top:1px solid var(--line);padding:1.5rem 1.25rem;text-align:center;color:var(--muted);font-size:.85rem}
+.scrim{position:fixed;inset:0;background:rgba(10,15,30,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);z-index:10;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.drawer.on{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font-size:1.2rem}
+.x{background:none;border:0;font-size:1.6rem;line-height:1;color:var(--muted)}
+.db{flex:1;overflow-y:auto;padding:1rem 1.25rem}
+.df{padding:1rem 1.25rem;border-top:1px solid var(--line);display:grid;gap:.6rem}
+.line{display:grid;grid-template-columns:2.4rem 1fr auto;gap:.75rem;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--line)}
+.line .sw{width:2.4rem;height:2.4rem;border-radius:8px;display:grid;place-items:center}
+.qty{display:flex;align-items:center;gap:.4rem;margin-top:.2rem}
+.qty button{width:1.7rem;height:1.7rem;border-radius:8px;border:1px solid var(--line);background:none}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:1.1rem}
+.empty{color:var(--muted);text-align:center;padding:2.5rem 0}
+label{display:block;font-size:.85rem;font-weight:600;margin:.7rem 0 .25rem}
+input[type=text],input[type=tel]{width:100%;padding:.7rem .8rem;border-radius:10px;border:1px solid var(--line);background:var(--bg)}
+.err{color:var(--danger);font-size:.85rem;min-height:1.2rem;margin:.3rem 0 0}
+.phone{background:#111;border-radius:26px;padding:.9rem;max-width:300px;margin:1rem auto;box-shadow:0 0 0 3px #333}
+.screen{background:#f2f2f2;color:#111;border-radius:16px;padding:1rem;text-align:center;min-height:210px;display:flex;flex-direction:column;justify-content:center;gap:.5rem}
+.screen h4{margin:0;color:#2d7f1c}
+.screen .pin{display:flex;justify-content:center;gap:.5rem;margin:.3rem 0}
+.screen .pin i{width:.8rem;height:.8rem;border-radius:50%;background:#bbb;display:block}
+.screen .pin i.f{background:#111}
+.screen .row{display:flex;gap:.5rem;justify-content:center;margin-top:.4rem}
+.screen .row button{border:0;border-radius:8px;padding:.5rem .9rem;font-weight:600}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--mpesa);border-radius:50%;animation:s 1s linear infinite;margin:0 auto}
+@keyframes s{to{transform:rotate(360deg)}}
+.receipt{border:1px dashed var(--line);border-radius:12px;padding:1rem;margin:.8rem 0;font-size:.9rem}
+.receipt div{display:flex;justify-content:space-between;padding:.15rem 0}
+.ok{display:grid;place-items:center;width:3.2rem;height:3.2rem;border-radius:50%;background:var(--mpesa);color:#06210b;font-size:1.6rem;margin:0 auto .5rem}
+.note{font-size:.8rem;color:var(--muted)}
+.theme{background:none;border:1px solid var(--line);border-radius:999px;padding:.3rem .7rem;font-size:.8rem}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.kitenge{max-height:200px;aspect-ratio:auto;height:180px}}
+@media (prefers-reduced-motion:reduce){.drawer,.scrim{transition:none}.spin{animation-duration:3s}}
+</style>
+</head>
+<body>
+<div class="demo-bar">Demo shop. No real money moves. Payments are simulated.</div>
+<header class="top">
+  <div class="brand" id="bname"></div>
+  <div style="display:flex;gap:.6rem;align-items:center">
+    <button class="theme" id="theme" aria-label="Toggle dark mode">Dark mode</button>
+    <button class="cartbtn" id="open" aria-label="Open cart">Cart <span class="n" id="count">0</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <h1 id="tag"></h1>
+    <p>Pick your items, pay with M-Pesa on your phone, and we get your order on WhatsApp straight away. Delivery across Nairobi in 24 hours.</p>
+    <div class="chips"><span class="chip">Pay via M-Pesa</span><span class="chip">Order alert on WhatsApp</span><span class="chip">Nairobi delivery</span></div>
+  </div>
+  <div class="kitenge" role="img" aria-label="Kitenge-style pattern"></div>
+</section>
+
+<main>
+  <h2>Shop</h2>
+  <div class="grid" id="grid"></div>
+</main>
+<footer id="foot"></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Cart and checkout" aria-hidden="true">
+  <div class="dh"><h2 id="dtitle">Your cart</h2><button class="x" id="close" aria-label="Close">&times;</button></div>
+  <div class="db" id="db"></div>
+  <div class="df" id="df"></div>
+</aside>
+
+<script>
+// ===== Client config: the only block you edit per client =====
+const business = {
+  name: "Wanjiru's Boutique",
+  tagline: "Ankara and kitenge, made in Nairobi.",
+  whatsapp: "254700000000",
+  tillOrPaybill: "174379",
+  products: [
+    {id:1,name:"Ankara Wrap Dress",price:2500,emoji:"👗",c:"#d6336c",desc:"Knee length, sizes S to XL."},
+    {id:2,name:"Kitenge Tote Bag",price:1800,emoji:"👜",c:"#0f766e",desc:"Lined, with zip pocket."},
+    {id:3,name:"Maasai Beaded Belt",price:1200,emoji:"📿",c:"#f59e0b",desc:"Handmade in Kajiado."},
+    {id:4,name:"Ankara Head Wrap",price:600,emoji:"🧣",c:"#7c3aed",desc:"Pre-tied, one size."},
+    {id:5,name:"Kitenge Men's Shirt",price:2200,emoji:"👔",c:"#2563eb",desc:"Slim fit, short sleeve."},
+    {id:6,name:"Leather Sandals",price:1500,emoji:"🩴",c:"#b45309",desc:"Handcrafted, sizes 36 to 44."}
+  ]
+};
+// ===== App =====
+const $ = s => document.querySelector(s);
+const fmt = n => "KSh " + n.toLocaleString("en-KE");
+let cart = {}, view = "cart", order = null, flow = null;
+const byId = id => business.products.find(p => p.id === id);
+const items = () => Object.entries(cart).map(([id,q]) => ({...byId(+id), q}));
+const total = () => items().reduce((a,i) => a + i.price*i.q, 0);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+$("#bname").textContent = business.name;
+$("#tag").textContent = business.tagline;
+$("#foot").textContent = business.name + " · M-Pesa Till/Paybill " + business.tillOrPaybill + " · Built by [Your Name], WhatsApp [your number]";
+document.title = business.name + " – Demo Shop";
+
+$("#grid").innerHTML = business.products.map(p => `
+  <article class="card">
+    <div class="swatch" style="background:linear-gradient(135deg,${p.c},${p.c}99)" aria-hidden="true">${p.emoji}</div>
+    <div class="body"><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc)}</div>
+    <div class="price">${fmt(p.price)}</div>
+    <button class="btn" data-add="${p.id}">Add to cart</button></div>
+  </article>`).join("");
+
+$("#grid").addEventListener("click", e => {
+  const id = e.target.dataset.add; if (!id) return;
+  cart[id] = (cart[id]||0) + 1; sync(); toast(e.target);
+});
+function toast(btn){ const t = btn.textContent; btn.textContent = "Added"; setTimeout(()=>btn.textContent=t, 700); }
+
+function openDrawer(){ $("#drawer").classList.add("on"); $("#scrim").classList.add("on"); $("#drawer").setAttribute("aria-hidden","false"); render(); }
+function closeDrawer(){ $("#drawer").classList.remove("on"); $("#scrim").classList.remove("on"); $("#drawer").setAttribute("aria-hidden","true"); if (view==="done"){ cart={}; view="cart"; sync(); } }
+$("#open").onclick = () => { if (view!=="pay") view = view==="done" ? "done" : "cart"; openDrawer(); };
+$("#close").onclick = closeDrawer; $("#scrim").onclick = closeDrawer;
+document.addEventListener("keydown", e => { if (e.key==="Escape") closeDrawer(); });
+
+function sync(){ $("#count").textContent = Object.values(cart).reduce((a,b)=>a+b,0); if ($("#drawer").classList.contains("on")) render(); }
+
+function render(){
+  const db = $("#db"), df = $("#df"), title = $("#dtitle");
+  if (view === "cart") {
+    title.textContent = "Your cart";
+    const it = items();
+    if (!it.length) { db.innerHTML = '<div class="empty">Your cart is empty.<br>Add something from the shop.</div>'; df.innerHTML = ""; return; }
+    db.innerHTML = it.map(i => `<div class="line"><div class="sw" style="background:${i.c}">${i.emoji}</div>
+      <div><strong>${esc(i.name)}</strong><div class="qty"><button data-d="-1" data-id="${i.id}" aria-label="Fewer">−</button><span>${i.q}</span><button data-d="1" data-id="${i.id}" aria-label="More">+</button></div></div>
+      <div>${fmt(i.price*i.q)}</div></div>`).join("");
+    df.innerHTML = `<div class="total"><span>Total</span><span>${fmt(total())}</span></div><button class="btn" id="go">Checkout</button>`;
+    $("#go").onclick = () => { view = "checkout"; render(); };
+  }
+  else if (view === "checkout") {
+    title.textContent = "Checkout";
+    db.innerHTML = `<label for="nm">Your name</label><input type="text" id="nm" autocomplete="name" placeholder="e.g. Amina Otieno">
+      <label for="ph">M-Pesa phone number</label><input type="tel" id="ph" inputmode="numeric" autocomplete="tel" placeholder="07XX XXX XXX">
+      <label for="ad">Delivery location</label><input type="text" id="ad" placeholder="e.g. Kilimani, Nairobi">
+      <p class="err" id="err" role="alert"></p>
+      <p class="note">You will get an M-Pesa prompt on this number. Enter your PIN to pay ${fmt(total())}.</p>`;
+    df.innerHTML = `<div class="total"><span>Pay</span><span>${fmt(total())}</span></div>
+      <button class="btn mpesa" id="pay">Pay with M-Pesa</button><button class="btn ghost" id="back">Back to cart</button>`;
+    $("#back").onclick = () => { view = "cart"; render(); };
+    $("#pay").onclick = startPay;
+  }
+  else if (view === "pay") {
+    title.textContent = "M-Pesa payment";
+    df.innerHTML = "";
+    db.innerHTML = `<p class="note" style="text-align:center">Customer's phone (simulated)</p><div class="phone"><div class="screen" id="scr"></div></div>
+      <p class="note" style="text-align:center" id="srv"></p>`;
+    paintPhone();
+  }
+  else if (view === "done") {
+    title.textContent = "Order confirmed";
+    const o = order;
+    const lines = o.items.map(i => `${i.q} x ${i.name} = ${fmt(i.price*i.q)}`).join("\n");
+    const msg = `New order ${o.id} (paid)\nCustomer: ${o.name}, ${o.phone}\nDeliver to: ${o.addr}\n\n${lines}\n\nTotal: ${fmt(o.total)}\nM-Pesa receipt: ${o.receipt}`;
+    db.innerHTML = `<div style="text-align:center"><div class="ok">✓</div><h3 style="margin:.2rem 0">Payment received</h3>
+      <p class="note">Thank you, ${esc(o.name)}. We will deliver to ${esc(o.addr)}.</p></div>
+      <div class="receipt"><div><span>Order</span><b>${o.id}</b></div><div><span>M-Pesa receipt</span><b>${o.receipt}</b></div><div><span>Amount</span><b>${fmt(o.total)}</b></div><div><span>Paid from</span><b>${esc(o.phone)}</b></div></div>
+      <p class="note"><b>Owner view:</b> this is the alert the shop owner would receive on WhatsApp.</p>
+      <pre class="receipt" style="white-space:pre-wrap;font:inherit;margin:.3rem 0">${esc(msg)}</pre>`;
+    df.innerHTML = `<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/${business.whatsapp}?text=${encodeURIComponent(msg)}">Send order to WhatsApp</a><button class="btn ghost" id="fin">Continue shopping</button>`;
+    $("#fin").onclick = () => { cart={}; view="cart"; sync(); closeDrawer(); };
+  }
+}
+
+$("#db").addEventListener("click", e => {
+  const id = e.target.dataset.id; if (!id) return;
+  cart[id] += +e.target.dataset.d; if (cart[id] <= 0) delete cart[id]; sync();
+});
+
+function normPhone(v){ const d = v.replace(/\D/g,""); if (/^0[71]\d{8}$/.test(d)) return "254"+d.slice(1); if (/^254[71]\d{8}$/.test(d)) return d; return null; }
+
+function startPay(){
+  const name = $("#nm").value.trim(), addr = $("#ad").value.trim(), msisdn = normPhone($("#ph").value);
+  const err = $("#err");
+  if (!name) return err.textContent = "Enter your name.";
+  if (!msisdn) return err.textContent = "Enter a valid Safaricom number, like 0712345678.";
+  if (!addr) return err.textContent = "Enter a delivery location.";
+  const id = "ORD-" + Math.floor(1000 + Math.random()*9000);
+  order = {id, name, addr, phone:"+"+msisdn, items:items(), total:total(), receipt:null};
+  // In the real build this is POST /api/stk -> Daraja STK Push. Here we simulate it.
+  flow = {step:"sending", pin:0};
+  view = "pay"; render();
+  setTimeout(() => { if (flow && flow.step==="sending"){ flow.step="prompt"; paintPhone(); setSrv("STK Push accepted. Waiting for customer to enter PIN."); } }, 1400);
+}
+function setSrv(t){ const s = $("#srv"); if (s) s.textContent = t; }
+
+function paintPhone(){
+  const s = $("#scr"); if (!s || !flow) return;
+  if (flow.step === "sending") { s.innerHTML = '<div class="spin"></div><span>Sending payment request…</span>'; setSrv("Server: POST /api/stk"); }
+  else if (flow.step === "prompt") {
+    s.innerHTML = `<h4>M-PESA</h4><div>Pay <b>${fmt(order.total)}</b> to <b>${esc(business.name)}</b> (${business.tillOrPaybill})?</div>
+      <div>Enter M-Pesa PIN</div><div class="pin">${[0,1,2,3].map(i=>`<i class="${i<flow.pin?'f':''}"></i>`).join("")}</div>
+      <div class="row"><button style="background:#ddd" id="cn">Cancel</button><button style="background:#43b02a;color:#06210b" id="ok">${flow.pin<4?'Type PIN':'Send'}</button></div>`;
+    $("#cn").onclick = () => finish(false);
+    $("#ok").onclick = () => { if (flow.pin<4){ flow.pin=4; paintPhone(); } else { flow.step="wait"; paintPhone(); setTimeout(()=>finish(true),1300); } };
+  }
+  else if (flow.step === "wait") { s.innerHTML = '<div class="spin"></div><span>Processing…</span>'; setSrv("Waiting for Safaricom callback…"); }
+  else if (flow.step === "failed") {
+    s.innerHTML = `<h4 style="color:#b42318">Request cancelled</h4><div>The payment was not completed. No money was taken.</div>
+      <div class="row"><button style="background:#43b02a;color:#06210b" id="rt">Try again</button></div>`;
+    $("#rt").onclick = () => { view = "checkout"; render(); };
+    setSrv("Callback: ResultCode 1032 (request cancelled by user)");
+  }
+}
+function finish(success){
+  if (!flow) return;
+  if (!success) { flow.step = "failed"; paintPhone(); return; }
+  order.receipt = "S" + Math.random().toString(36).slice(2,5).toUpperCase() + Math.random().toString(36).slice(2,9).toUpperCase();
+  flow = null; view = "done"; render(); sync();
+}
+
+// theme toggle
+let dark = matchMedia("(prefers-color-scheme: dark)").matches;
+$("#theme").onclick = () => { dark = !dark; document.documentElement.dataset.theme = dark ? "dark" : "light"; $("#theme").textContent = dark ? "Light mode" : "Dark mode"; };
+$("#theme").textContent = dark ? "Light mode" : "Dark mode";
+</script>
+</body>
+</html>
